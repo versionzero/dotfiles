@@ -30,6 +30,10 @@
 (add-hook 'text-mode-hook (lambda()(flyspell-mode 1)))
 (add-hook 'tex-mode-hook  (lambda()(flyspell-mode 1)))
 
+;; Set the cursor to be something more visible.  Can be any of "box"
+;; "hollow" "bar" "hbar".
+(set-default 'cursor-type 'bar)
+
 ;; general coding/editing niceties
 ;(require 'line-num)
 (require 'whitespace)

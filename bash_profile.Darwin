@@ -78,6 +78,12 @@ export PATH=$HOME/.cabal/bin:$PATH
 #fi
 
 ##
+# node.js
+##
+
+NODE_PATH=/usr/local/lib/node:${NODE_PATH}
+
+##
 # Local Variables: 
 # mode: sh
 # End: 
