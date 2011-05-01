@@ -2,12 +2,6 @@
 # .bash_profile
 ##
 
-# We need to configure our local binary directory first, since we need
-# some of the tools in it for the basic configuration that follows.
-MY_LOCAL_PATH="$HOME/.local"
-MY_BIN_PATH=$MY_LOCAL_PATH/bin
-export PATH=${MY_BIN_PATH}:${PATH}
-
 ##
 # Standard Environment
 ## 
@@ -16,6 +10,20 @@ export PATH=${MY_BIN_PATH}:${PATH}
 if [ -e ~/.bashrc ]; then
     . ~/.bashrc
 fi
+
+##
+# Path
+##
+
+# We need to configure our local binary directory first, since we need
+# some of the tools in it for the basic configuration that follows.
+MY_LOCAL_PATH="$HOME/.local"
+MY_BIN_PATH="$MY_LOCAL_PATH/bin"
+export PATH=${MY_BIN_PATH}:/usr/bin:/usr/sbin:$PATH
+
+##
+# Profiles
+##
 
 # Cache the system's name
 SYSTEM_NAME=`system-name`
@@ -47,7 +55,7 @@ if [ -d "${SYSTEM_PROFILE_PATH}" ]; then
 fi
 
 ##
-# Compilers
+# Paths
 ##
 
 ## C/C++ related
@@ -66,17 +74,6 @@ MY_LIB_PATH="$MY_LOCAL_PATH/lib"
 
 LIBRARY_PATH=$MY_LIB_PATH:$LIBRARY_PATH
 export LIBRARY_PATH
-
-##
-# Path
-##
-
-# Add pwd and our local bin directory to the path.
-MY_BIN_PATH="$MY_LOCAL_PATH/bin"
-PATH=$MY_BIN_PATH:/usr/bin:/usr/sbin:$PATH
-
-# Export the new path
-export PATH
 
 ##
 # X11
@@ -117,7 +114,7 @@ export HISTSIZE=1000
 
 # Ignore duplicates in history file
 export HISTCONTROL=ignoredups
-export HISTIGNORE="&:[bf]g:exit:rmtmp[tex]:source"
+export HISTIGNORE="&:[bf]g:exit:rmtmp[tex]"
 
 # Set default file protection mask
 ##
