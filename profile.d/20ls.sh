@@ -4,9 +4,9 @@
 
 # On Linux we need to tell 'ls' explicitly to use colours, even
 # through we have defined the environment correctly.
-LS='ls'
-if [ `uname` == "Linux" ]; then
-    COLOUR='ls --color'
+LS='/bin/ls'
+if [ "`uname`" == "Linux" ]; then
+    LS='/bin/ls --color'
 fi
 
 ##
