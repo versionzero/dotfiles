@@ -8,7 +8,7 @@
 # intentions, we define an alias that hits more clearly at our
 # intended action.
 function exists {
-    which "$@"
+    which "$@" 2>/dev/null
 }
 
 # Since bash functions 'return' cannot return a value, we use echo in
