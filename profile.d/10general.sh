@@ -9,7 +9,7 @@ alias follow='tail -f'
 alias h='fc -lr'
 
 # simple clear screen (ala MS-DOS)
-alias cls=clear 
+alias cls='clear'
 
 # grep clourizer
 alias grep='grep --color'
@@ -29,8 +29,8 @@ alias g='git'
 ## ssh helper: the school computers don't understand the xterm-color termcap
 ## so we just change it when we use ssh
 function ssh { 
-    SSH="/usr/bin/ssh"
-    TERM=xterm $SSH -Y "$@"
+    local SSH="/usr/bin/ssh"
+    TERM=xterm ${SSH} -Y "$@"
 }
 
 ##
