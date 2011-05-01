@@ -21,8 +21,8 @@ fi
 SYSTEM_NAME=`system-name`
 
 # Operating system specific environment and customizations.
-SYSTEM_PROFILE="~/.bash_profile.${SYSTEM_NAME}"
-if [ -x "${SYSTEM_PROFILE}" ] ; then 
+SYSTEM_PROFILE="${HOME}/.bash_profile.${SYSTEM_NAME}"
+if [ -f "${SYSTEM_PROFILE}" ] ; then 
     . "${SYSTEM_PROFILE}"
 fi
 
