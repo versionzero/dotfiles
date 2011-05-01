@@ -1,9 +1,9 @@
 > "These are a few of my favorite things." 
 > - Oscar Hammerstein II
 
-In this textal trove is an assorment of things that I've found to be
+In this textual trove is an assortment of things that I've found to be
 useful in my day to day work.  Some of the gems are mine, but most of
-them are borrowed.  As time permist I'll add in credit where credit is
+them are borrowed.  As time permits I'll add in credit where credit is
 due.  For now, just assume far brighter than me wrote all of them.
 
 To use the dot files, you only need to clone the repository:
