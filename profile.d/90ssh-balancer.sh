@@ -41,7 +41,7 @@ done
 # We also check if balance is actually installed, if it is not, then
 # we just issue a polite warning.
 if [ $(exists balance) ]; then
-    if [ ! $(running balance) ]; then
+    if [ $(not running balance) ]; then
 	balance ${LOCAL} ${SERVERS}
     fi
 else
