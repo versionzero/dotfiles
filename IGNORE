@@ -1,0 +1,8 @@
+# Ignore *this* file
+IGNORE
+
+# Files we should not make dot files out of
+.*
+*~
+install.sh
+README.md

@@ -1,0 +1,187 @@
+#!/bin/bash
+####
+#	Ouput all systems info from ldap 
+#
+#	Jeremy Schultz
+#		2007-06-01: Initial Creation
+#		2007-06-28: Changed output to use printf
+#					A nicer tabular format
+#		2007-09-14: Update to use ldapsearch, so it runs on linux
+#		2007-11-05: Bug fix, entries with more than 1 cn were causing issues
+#					Script only looks at the first cn in the list
+#		2007-11-06: Updated the colomn sizes (printf) for a cleaner look
+####
+
+# LDAP Info
+BASEDN="dc=cs,dc=uleth,dc=ca"
+BINDDN="cn=proxyagent,ou=profile,$BASEDN"
+
+PWFILE="$HOME/.proxyagent"
+
+# Setup the LDAP search command
+if [ "`uname`" = "SunOS" ]; then
+	LDAPSEARCH="/usr/bin/ldapsearch -D $BINDDN -j $PWFILE -Z -P /var/ldap -h romulus.cs.uleth.ca -1 "
+	GREP="/usr/sfw/bin/ggrep"
+elif [ "`uname`" = "Linux" ]; then
+	LDAPSEARCH="/usr/bin/ldapsearch -D $BINDDN -y $PWFILE -x -ZZ -LLL "
+	GREP="/bin/grep"
+elif [ "`uname`" = "Darwin" ]; then
+    	LDAPSEARCH="/usr/bin/ldapsearch -D $BINDDN -y $PWFILE -x -ZZ -LLL -h romulus.cs.uleth.ca"
+	GREP="/usr/bin/grep"
+fi
+
+usage()	{
+	cat <<EOF
+Usage: `basename $0` [-l location] [-d descripition] [-o OS] [-i IP] [-h hostname] [-a] [-T]"
+        -a: print additional info"
+	-T: tabbed deliminated list and no header"
+EOF
+	exit 1
+}
+
+#Default Values
+LOC="*"
+DESC="*"
+PRINT_OS="*"
+IP="*"
+HOST="*"
+
+# Get current values
+while getopts "l:d:o:i:h:a?T?" options; do
+  case $options in
+    l ) LOC="*$OPTARG*"
+        ;;
+    d ) DESC="*$OPTARG*"
+        ;;
+	o ) PRINT_OS="*$OPTARG*"
+        ;;
+	i ) IP="$OPTARG*"
+        ;;
+	h ) HOST="*$OPTARG*"
+        ;;
+	T ) TABD="T"
+        ;;
+        a ) ALL="T"
+        ;;
+    ? )
+		usage
+	;;
+  esac
+done
+
+HOSTNAME=
+ETHERS_LIST=`($LDAPSEARCH -b ou=Ethers,$BASEDN -S cn "(&(cn=$HOST)(bootParameter=$PRINT_OS))"  | egrep '(dn:|macAddress:|bootParameter:)';echo dn:)`
+if [ -z "$ALL" ]; then
+#NO ADDITIONAL STUFF
+if [ -z "$TABD" ]; then
+	LINE_FORMAT="%-15s %-15s %-18s %-13s %-15s %s\n" 
+	printf "$LINE_FORMAT" Hostname IP Ether OS Location Description
+else
+	LINE_FORMAT="%s\t%s\t%s\t%s\t%s\t%s\n" 
+fi
+else
+#PRINT THE EXTRAS!
+if [ -z "$TABD" ]; then
+	LINE_FORMAT="%-15s %-10s %-10s %-7s %-10s %-12s\n" 
+	printf "$LINE_FORMAT" Hostname OS Location Barcode ServiceTag Description
+else
+	LINE_FORMAT="%s\t%s\t%s\t%s\t%s\t%s\n" 
+fi
+fi
+
+
+# Need to append a final dn: or the last entry will not print
+($LDAPSEARCH -b ou=Hosts,$BASEDN -S cn "(& (cn=$HOST)(ipHostNumber=$IP)(l=$LOC)(description=$DESC) )" | egrep '(dn:|cn:|ipHostNumber:|description:|l:|serialNumber:)'; BCOD="*";STAG="*"; echo dn: ) | 
+while read name value; do
+    case "$name" in
+	cn:)
+	    if [ -z "$HOSTNAME" ]; then 
+		HOSTNAME=$value
+	    fi
+	    ;;	
+	ipHostNumber::)
+	    IP=`echo $value | openssl base64 -d | sed -e 's/^[ ]*//' -e 's/[ ]*$//'`
+	    ;;	
+	ipHostNumber:)
+	    IP=$value
+	    ;;	
+	description::)
+	    DESC=`echo $value | openssl base64 -d | sed -e 's/^[ ]*//' -e 's/[ ]*$//'`
+	    ;;	
+	description:)
+	    DESC=$value
+	    ;;	
+	l::)
+	    LOC=`echo $value | openssl base64 -d | sed -e 's/^[ ]*//' -e 's/[ ]*$//'`
+	    ;;	
+	l:)
+	    LOC=$value
+	    ;;
+	#serialNumber::)
+	#BCOD=`echo $value | openssl base64 -d | sed -e 's/^[ ]*//' -e 's/[ ]*$//'`
+	#;;	
+	serialNumber:)
+	    base=`echo $value | cut -f 1 -d '='`
+	    case "$base" in
+		uofl)
+		    BCOD=`echo $value | cut -f 2 -d '='`
+		    ;;
+		stag)
+		    STAG=`echo $value | cut -f 2 -d '='`
+		    ;;
+		*)
+		    ;;
+	    esac    
+	    ;;
+	dn:)
+	    if [ -z "$HOSTNAME" ]; then
+		IP=
+		DESC=
+		LOC=
+		BCOD=""
+		STAG=""
+		continue
+	    fi
+	    
+	    (echo "$ETHERS_LIST" | $GREP -A3 "cn=$HOSTNAME" | sed '{1d;}' ; echo dn:) | 
+	    while read name value; do
+		case $name in
+		    macAddress::)
+			ETHER=`echo $value | openssl base64 -d | sed -e 's/^[ ]*//' -e 's/[ ]*$//'`
+			;;
+		    macAddress:)
+			ETHER=$value
+			
+			;;
+		    bootParameter::)
+			OS=`echo $value | openssl base64 -d | sed -e 's/^[ ]*//' -e 's/[ ]*$//'`
+			;;
+		    bootParameter:)
+			OS=$value
+			;;
+		    dn:)
+			if [ "$PRINT_OS" != "*" -a -z "$OS" ]; then
+			    continue 2
+			fi
+			if [ -z "$ALL" ]; then
+			    printf "$LINE_FORMAT" "$HOSTNAME" "$IP" "$ETHER" "$OS" "$LOC" "$DESC"						
+			else
+			    printf "$LINE_FORMAT" "$HOSTNAME" "$OS" "$LOC" "$BCOD" "$STAG" "$DESC"
+			fi
+			
+		
+			#echo $STAG
+			continue 2
+			;;
+		    *)
+			echo "$name | $value"
+			;;
+		esac
+	    done
+	    HOSTNAME=""
+	    BCOD="*"
+	    STAG="*"
+	    ;;	
+    esac
+    
+done

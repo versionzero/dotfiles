@@ -1,0 +1,123 @@
+[user]
+	name = Ben Burnett
+	email = ben.burnett@gmail.com
+
+[alias]
+	a = add
+	aa = add --all
+	ae = add --edit
+	ai = add --interactive
+	amend = commit --amend -C HEAD
+	ap = add --patch
+	au = add --update
+	b = branch
+	c = commit
+	ca = commit --amend
+	changes = diff --name-status -r
+	co = checkout
+	cpc = cherry-pick
+	d = diff
+	ds = diff --staged
+	h = help
+	irb = rebase --interactive
+	l = log --oneline --decorate
+	lg = log --graph --pretty=format:'%Cred%h%Creset %an -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	ls-ignored = ls-files --exclude-standard --ignored --others
+	m = merge
+	mm = merge --no-ff
+	msg = commit --allow-empty -m
+	p = cherry-pick -s
+	r = remote
+	rb = rebase
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbprune = "!for remote in `git remote`; do git remote prune $remote; done"
+	rbs = rebase --skip
+	rh = reset --hard
+	ru = remote update --prune
+	s = status
+	sl = shortlog
+	sm = submodule
+	sma = submodule add
+	smu = submodule update --init
+	st = stash
+	stc = stash clear
+	stl = stash list
+	stp = stash pop
+	unadd = reset HEAD
+	ua = reset HEAD
+	undo = reset --soft HEAD^	
+	wd = diff --color-words
+	wds = diff --color-words --staged
+	b2t = "!f() { git tag -m \"$2\" $1-TAG $1  &&  git branch -D $1; }; f"
+	t2r = "!f() { git branch ${1%-TAG} $1  &&  git tag -d $1; }; f"
+
+[advice]
+	pushNonFastForward = false
+	statusHints = false
+
+[apply]
+	whitespace = nowarn
+
+[diff]
+	renames = copies
+	mnemonicprefix = true
+
+[difftool]
+	prompt = false
+
+[pager]
+	color = true
+
+[branch]
+	autosetupmerge = true
+
+[color]
+	ui = auto
+	
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[advice]
+	pushNonFastForward = false
+	statusHints = false
+	
+[color "diff"]
+	meta = yellow
+	frag = magenta 
+	old = red 
+	new = green
+	
+[color "status"]
+	added = yellow
+	changed = green
+	frag = cyan
+	old = red 
+	new = green
+	untracked = cyan
+	
+[push]
+	default = tracking
+
+[help]
+	autocorrect = 0
+
+[core]
+	editor = emacs
+	excludesfile = ~/.gitignore
+	whitespace = trailing-space,space-before-tab
+	quotepath = false
+
+[rerere]
+	enabled = 1
+
+[merge]
+	stat = true
+
+[diff "zip"]
+	textconv = unzip -c -a
+
+[github]
+	user = versionsero

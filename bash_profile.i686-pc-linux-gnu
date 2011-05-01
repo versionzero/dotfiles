@@ -1,0 +1,27 @@
+##
+# .bash_profile
+##
+
+##
+# Emacs
+##
+
+function e { emacs "$@" ; }
+
+##
+# Terminal
+##
+
+# Set up environment variables for colour file listings
+eval `dircolors -b`
+
+##
+# Local Variables: 
+# mode: sh
+# End: 
+##
+
+##
+# EOF
+##
+

@@ -1,0 +1,93 @@
+#!/bin/bash
+####
+# Show the status of the machines, up/down
+# Jeremy Schultz 
+#	2007-09-06 -  Initial Creation
+###
+
+
+# LDAP Info
+BASEDN="dc=cs,dc=uleth,dc=ca"
+BINDDN="cn=proxyagent,ou=profile,$BASEDN"
+PWFILE="$HOME/.proxyagent"
+
+# Make sure we can read the password
+if [ ! -r "$PWFILE" ]; then
+	echo "Cannot read password file: $PWFILE"
+	exit 1
+fi
+
+# Setup the LDAP search command
+#LDAPSEARCH="/usr/bin/ldapsearch -D $BINDDN -y $PWFILE -x -ZZ -LLL "
+# Setup the LDAP search command
+if [ "`uname`" = "SunOS" ]; then
+	LDAPSEARCH="/usr/bin/ldapsearch -D $BINDDN -j $PWFILE -Z -P /var/ldap -h romulus.cs.uleth.ca -1 "
+	GREP="/usr/sfw/bin/ggrep"
+elif [ "`uname`" = "Linux" ]; then
+	LDAPSEARCH="/usr/bin/ldapsearch -D $BINDDN -y $PWFILE -x -ZZ -LLL "
+	GREP="/bin/grep"
+fi
+
+
+
+# Usage Function
+usage() {
+cat <<EOF
+Usage: `basename $0` [-l Room#|Faculty] [-s up|down] [-d description] [-o] [-m]
+	-l: default is to show all locations
+	-s: default is to show both up and down
+	-d: default is to show any description
+	-o: include machines whose description is marked as offline
+	-m: include machines whose location is marked as mobile
+EOF
+exit 1
+}
+
+
+#Default Values
+LOC="*"
+DESC="*"
+PRINT_STATUS=
+OFFLINE="(!(description=*offline*))"
+MOBILE="(!(l=mobile))"
+
+# Get options 
+while getopts "l:d:oms:h?" options; do
+  case $options in
+    l ) LOC="*$OPTARG*"
+        ;;
+    d ) DESC="*$OPTARG*"
+        ;;
+    o ) OFFLINE=
+        ;;
+    m ) MOBILE=
+        ;;
+    s ) PRINT_STATUS="`echo $OPTARG | tr '[:upper:]' '[:lower:]'`"
+        ;;
+    ?|h ) usage
+        ;;
+  esac
+done
+
+
+($LDAPSEARCH -b ou=Hosts,$BASEDN "(&(l=$LOC)(description=$DESC)${OFFLINE}${MOBILE})" dn |
+sed 's/^dn:.*cn=\(.*\),.*ou=Hosts.*/\1/' |
+sudo nmap -v -sP -iL - | 
+$GREP ^Host | sed -e 's/\.$//' -e 's/^Host //' -e 's/appears to be //' ) | 
+while read VAR1 VAR2 VAR3; do
+	# Some machines only return the IP
+	# We can detect this and lookup the hostname via the IP
+	if [ -z "$VAR3" ]; then
+		HOST="`nslookup $VAR1 | $GREP name | sed 's/.*= \(.*\)\.$/\1/'`"
+		STATUS="$VAR2"
+	else
+		HOST="$VAR1"
+		STATUS="$VAR3"
+	fi
+
+	# Print only if -s was not set or -s up|down is the current status
+	if [ -n "$PRINT_STATUS" -a "$PRINT_STATUS" != "$STATUS" ]; then
+			continue
+	fi
+	printf "%s \t %s\n" $HOST $STATUS
+done

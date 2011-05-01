@@ -1,0 +1,116 @@
+#	$OpenBSD: ssh_config,v 1.22 2006/05/29 12:56:33 dtucker Exp $
+
+# This is the ssh client system-wide configuration file.  See
+# ssh_config(5) for more information.  This file provides defaults for
+# users, and the values can be changed in per-user configuration files
+# or on the command line.
+
+# Configuration data is parsed as follows:
+#  1. command line options
+#  2. user-specific file
+#  3. system-wide file
+# Any configuration value is only changed the first time it is set.
+# Thus, host-specific definitions should be at the beginning of the
+# configuration file, and defaults at the end.
+
+# Site-wide defaults for some commonly used options.  For a comprehensive
+# list of available options, their meanings and defaults, please see the
+# ssh_config(5) man page.
+
+# Host *
+#   ForwardAgent no
+#   ForwardX11 No
+#   RhostsRSAAuthentication no
+#   RSAAuthentication yes
+#   PasswordAuthentication yes
+#   HostbasedAuthentication no
+#   GSSAPIAuthentication no
+#   GSSAPIDelegateCredentials no
+#   GSSAPIKeyExchange no
+#   GSSAPITrustDNS no
+#   BatchMode no
+#   CheckHostIP yes
+#   AddressFamily any
+#   ConnectTimeout 0
+#   StrictHostKeyChecking ask
+#   IdentityFile ~/.ssh/identity
+#   IdentityFile ~/.ssh/id_rsa
+#   IdentityFile ~/.ssh/id_dsa
+#   Port 22
+#   Protocol 2,1
+#   Cipher 3des
+#   Ciphers aes128-cbc,3des-cbc,blowfish-cbc,cast128-cbc,arcfour,aes192-cbc,aes256-cbc
+#   EscapeChar ~
+#   Tunnel no
+#   TunnelDevice any:any
+#   PermitLocalCommand no
+
+Host *
+     ForwardAgent yes
+     ForwardX11 yes
+     ConnectTimeout 0
+     ServerAliveInterval 180     
+     IdentityFile ~/.private/id_rsa 
+     Protocol 2
+     XAuthLocation /usr/X11R6/bin/xauth
+     ForwardX11Trusted yes     
+
+Host github.com
+     HostName github.com
+     User git
+     IdentityFile ~/.private/git_hub
+     
+Host moe
+     HostName moe-wired
+     User benner
+
+Host ec2
+     HostName burnetts.org
+     IdentityFile ~/.private/ec2.pem
+     User ec2-user
+
+Host www
+     Hostname ssh.supremecenter107.com
+     User benner
+
+Host condor
+     HostName localhost
+     User condor
+     # Use port 2222 for load balancing over the 4 linux school
+     # hosts. Also, this save us from trying to connect to a host that
+     # is not actually up.
+     Port 2222
+     # This is a bit of a risk, as we my fall victim now to a
+     # person-in-the-middle attack, but until I can find a way to list
+     # the legitimate host names, so that ssh does not complain that
+     # the host key has changes.  The reason we see the host keys
+     # changing in our expected case is due to the fact that we are
+     # load-balancing over the 4 ssh servers the school provides.  It
+     # may happen that the machine's keys are changed for valid
+     # reasons, like the machine being reinstalled, but we will not
+     # detect it...  For now, I'll take the convenience over the
+     # strict security.
+     NoHostAuthenticationForLocalhost yes
+
+Host burnett
+     HostName localhost
+     User burnett
+     # Use port 2222 for load balancing over the 4 linux school
+     # hosts. Also, this save us from trying to connect to a host that
+     # is not actually up.
+     Port 2222
+     # This is a bit of a risk, as we my fall victim now to a
+     # person-in-the-middle attack, but until I can find a way to list
+     # the legitimate host names, so that ssh does not complain that
+     # the host key has changes.  The reason we see the host keys
+     # changing in our expected case is due to the fact that we are
+     # load-balancing over the 4 ssh servers the school provides.  It
+     # may happen that the machine's keys are changed for valid
+     # reasons, like the machine being reinstalled, but we will not
+     # detect it...  For now, I'll take the convenience over the
+     # strict security.
+     NoHostAuthenticationForLocalhost yes
+
+Host tonic
+     HostName tonic.cs.wisc.edu
+     User burnett

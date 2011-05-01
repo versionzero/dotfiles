@@ -1,0 +1,79 @@
+##
+# .bach_completion
+# Ben Burnett
+##
+
+##
+# Set a couple of useful vars
+##
+
+if [ ${BASH_VERSINFO[1]} '>' 04 ]; then
+	default="-o default"
+	dirnames="-o dirnames"
+	filenames="-o filenames"
+fi
+
+## 
+# Completion for Disk Utility Tool (Apple Computer, Inc.)
+# Utility to manage disks and volumes.
+##
+
+_diskutil()
+{
+	local cur prev
+	
+	COMPREPLY=()
+	cur=${COMP_WORDS[COMP_CWORD]}
+	prev=${COMP_WORDS[COMP_CWORD-1]}
+	verb=${COMP_WORDS[1]}
+
+	case $prev in
+		diskutil)
+			COMPREPLY=( $( compgen -W 'list info unmount \
+				unmountDisk eject mount mountDisk rename enableJournal \
+				disableJournal verifyDisk repairDisk verifyPermissions \
+				repairPermissions eraseDisk eraseVolume eraseOptical \
+				partitionDisk createRAID destroyRAID checkRAID \
+				repairMirror' -- $cur ) )
+			return 0;
+			;;
+		*)
+			case $verb in
+				?(un)mount)
+					# single volumes
+					return 0
+					;;
+				unmountDisk)
+					# entire disk
+					return 0
+					;;
+				eject)
+					# ejectable volumes/disks
+					return 0
+					;;
+				mount)
+					# single volumes
+					return 0
+					;;
+				mountDisk)
+					# entire disk
+					return 0
+					;;
+				rename)
+					# rename a volume
+				
+			esac
+			diskdrives=$( /bin/ls /dev/disk* | sed 's/\/dev\///' )
+			COMPREPLY=( $( compgen -W '$diskdrives'	-- "$cur" ) )
+			return 0;
+			;;
+	esac
+	return 0
+}
+complete -F _diskutil -o filenames diskutil
+
+###  Local Variables:
+###  mode: shell-script
+###  End:
+
+

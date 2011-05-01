@@ -1,0 +1,66 @@
+#!/bin/bash
+###
+# Desc: Check for users in homex with high capacity %
+#
+# Author: Jeremy Schultz
+# Date: 2007-02-16 
+# Version: 1.0
+###
+
+# If this file is set, then the script will only report
+# when there has been a change since the last check
+LAST_ZFS_CHECK=/root/bin/lastZfsCheck
+
+# You can change the threshold of the check
+# by modifying the first [] in grep
+CAP=`df -hFzfs | grep homex.*[6-9][0-9]%`
+
+
+# Exit if no one has a high capacity
+if [ $? == 1 ]; then
+	# Reset last zfs check if it exists
+	if [ -n "$LAST_ZFS_CHECK" -a -f "$LAST_ZFS_CHECK" ]; then
+		cat /dev/null > $LAST_ZFS_CHECK
+	fi
+	exit 0
+fi
+
+# Get the Last check
+if [ -n "$LAST_ZFS_CHECK" -a -f "$LAST_ZFS_CHECK" ]; then
+	LAST=`cat $LAST_ZFS_CHECK`
+fi
+
+# Exit if there has been no change
+if [ -n "$CAP" -a  "$CAP" == "$LAST" ] ; then
+ exit 0 
+fi
+
+# Udate last zfs check
+if [ -n "$LAST_ZFS_CHECK" -a -f "$LAST_ZFS_CHECK" ]; then
+cat > $LAST_ZFS_CHECK << EOF
+$CAP
+EOF
+fi
+
+
+## Output ##
+
+df -hFzfs | head -n1
+echo "$CAP"
+echo 
+echo 
+echo Details:
+DIRS=`echo "$CAP" | tr -s ' '|  cut -d' ' -f6`
+for DIR in $DIRS; do
+	echo "==== Top 5 for ${DIR} ==== " 
+	cd ${DIR}
+	du -h  | grep [0-9]M | sort -nr | head -n5
+
+	echo "==== Snapshots for ${DIR} ==== " 
+	cd ${DIR}/.zfs/snapshot
+	du -sh * | grep [0-9]M | sort -nr 
+
+	echo
+	echo
+done
+

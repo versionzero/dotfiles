@@ -1,0 +1,8 @@
+
+# (Note: 63 is the left Option key and 66 is the left Command key)
+clear Mod1
+clear Mod2
+keycode 63 = Mode_switch
+keycode 66 = Meta_L
+add Mod1 = Meta_L
+add Mod2 = Mode_switch

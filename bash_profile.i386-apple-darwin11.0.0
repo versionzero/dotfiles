@@ -1,0 +1,83 @@
+##
+# .bash_profile
+##
+
+##
+# Common Variables
+##
+
+BREW_PREFIX=`brew --prefix`
+
+##
+# Standard Environment
+## 
+
+# Source the brew installed bash completion
+if [ -f ${BREW_PREFIX}/etc/bash_completion ]; then
+    . ${BREW_PREFIX}/etc/bash_completion
+fi
+
+##
+# Path
+##
+
+# Homebrew tools
+PATH=$MY_BIN_PATH:${BREW_PREFIX}/bin:${BREW_PREFIX}/sbin:$PATH
+
+# WMare Fusion tools
+FUSION_PATH="/Library/Application Support/VMware Fusion"
+if [ -d "${FUSION_PATH}" ]; then
+    PATH=$FUSION_PATH:$PATH
+fi
+
+# OS X Developer tools
+OSXDEV_PATH=/Developer
+if [ -d ${OSXDEV_PATH} ]; then
+    PATH=${OSXDEV_PATH}/Tools:${OSXDEV_PATH}/usr/bin:${OSXDEV_PATH}/usr/sbin:$PATH
+fi
+
+# Export the new path
+export PATH
+
+##
+# Terminal
+##
+
+# Set up environment variables for colour file listings
+export TERM=xterm-color
+export CLICOLOR=true
+export LSCOLORS=gxfxcxdxbxegedabagacad
+
+##
+# GNU Plot
+## 
+
+if [ -e /Applications/AquaTerm.app ]; then
+    GNUTERMAPP=/Applications/AquaTerm.app
+    GNUTERM=aqua
+else
+    GNUTERMAPP=/Applications/Utilities/X11.appp
+    GNUTERM=x11
+fi
+export GNUTERMAPP GNUTERM
+
+##
+# Xmonad
+##
+
+export PATH=$HOME/.cabal/bin:$PATH
+
+#if $(which xmonad); then
+#    export USERWM=`which xmonad`
+#fi
+
+##
+# Local Variables: 
+# mode: sh
+# End: 
+##
+
+##
+# EOF
+##
+
