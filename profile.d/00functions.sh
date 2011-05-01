@@ -22,7 +22,7 @@ function exists {
 #
 # Where $(os "blah") is a function.  Using echo this way allows us to
 # treat function as if it were executables themselves.
-function return {
+function myreturn {
     if [ ${1} -ne 0 ]; then
 	echo "false"
     fi
@@ -33,9 +33,9 @@ function return {
 # The following will help us cleanly determine which OS is being used.
 function os {
     if [ "`uname`" != "$@" ]; then
-	return 1
+	myreturn 1
     fi
-    return 0
+    myreturn 0
 }
 
 # The Linux and Max OS X versions of the pidof tool are too different
@@ -50,9 +50,9 @@ function running {
 	PID=`pidof "$@"`
     fi
     if [ "${PID}x" == "x" ]; then
-	return 1
+	myreturn 1
     fi
-    return 0
+    myreturn 0
 }
 
 # Just negate the result of the function we are given.  Note that we
@@ -64,9 +64,9 @@ function not {
     local NAME=$1
     shift
     if [ $(${NAME} "$@") ]; then
-	return 1
+	myreturn 1
     fi
-    return 0
+    myreturn 0
 }
 
 ##
