@@ -37,9 +37,16 @@ done
 # that is running.  This is not fool-proof, as we might be running
 # other instances of the load balancer for other purposes, but we'll
 # deal with that when it comes up :)
-PID=`pidof | grep ${USER} | grep balance | awk '{ printf $2 }'`
-if [ "${PID}x" == "x" ]; then
-    balance ${LOCAL} ${SERVERS}
+#
+# We also check if balance is actually installed, if it is not, then
+# we just issue a polite warning.
+if [ $(exists balance) ]; then
+    if [ ! $(running balance) ]; then
+	balance ${LOCAL} ${SERVERS}
+    fi
+else
+    echo "NOTE: Balance is NOT installed. SSH load-balancing will be"
+    echo "disabled for this session. (http://www.inlab.de/balance.html)"
 fi
 
 # There are some major security considerations with this approach that
