@@ -32,7 +32,7 @@ function myreturn {
 # From time to time we need to know is a particular OS is running.
 # The following will help us cleanly determine which OS is being used.
 function os {
-    if [ "`uname`" != "$@" ]; then
+    if [ "`uname`" == "$@" ]; then
 	myreturn 1
     fi
     myreturn 0

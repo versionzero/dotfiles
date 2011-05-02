@@ -18,7 +18,7 @@ function start_agent {
     /usr/bin/ssh-add    
 }
 
-if [ $(os Linux) ]; then
+if [ $(os "Linux") ]; then
     if [ -f "${SSH_ENV}" ]; then
 	. "${SSH_ENV}" >/dev/null
 	if [ $(not running ssh-agent) ]; then
