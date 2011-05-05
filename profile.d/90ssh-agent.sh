@@ -9,13 +9,13 @@
 SSH_ENV="${HOME}/.private/environment"
 
 function start_agent {
-    trap "kill $SSH_AGENT_PID; /bin/rm -f \"${SSH_ENV}\"" 0
     echo "Initialising new SSH agent... "
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' >"${SSH_ENV}"
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' >|"${SSH_ENV}"
     echo "done."
     /bin/chmod 600 "${SSH_ENV}"
     . "${SSH_ENV}" >/dev/null
     /usr/bin/ssh-add    
+    trap "kill $SSH_AGENT_PID; /bin/rm -f \"${SSH_ENV}\"" 0
 }
 
 if [ $(os "Linux") ]; then
