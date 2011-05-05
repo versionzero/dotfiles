@@ -45,5 +45,6 @@ for DIRECTORY in `find ${CWD}/. -maxdepth 1 -not -name '.*' -type d`; do
     ln -fsv ${CWD}/${NAME} ${DESTINATION}
 done
 
-printf "\nAll done!\n"
+printf "\nAll done! Run the following to activate the new "
+printf "settings:\n\n    $ source\n"
 
