@@ -26,10 +26,12 @@ REMOTE=22
 # down, we will just move on to the next.  This makes it dead simple
 # for writing scripts that depend on a host name. Put simply, we do
 # not ever need to write fail-over code.
-SERVERS=
-for i in {1..3}; do
-    SERVERS="linux${i}.cs.uleth.ca:${REMOTE} ${SERVERS}"
-done
+function build_server_list {
+    SERVERS=
+    for NAME in `cat ${SSH_HOSTS}`; do
+	SERVERS="${NAME}:${REMOTE} ${SERVERS}"
+    done
+}
 
 # Before we try to start the load balancer, we should check if it is
 # already running.  This can happen, if we re-source our configuration
@@ -40,16 +42,32 @@ done
 #
 # We also check if balance is actually installed, if it is not, then
 # we just issue a polite warning.
-if [ $(exists balance) ]; then
-    if [ $(not running balance) ]; then
-	balance ${LOCAL} ${SERVERS}
+function run_load_balancer {
+    if [ $(exists balance) ]; then
+	if [ $(not running balance) ]; then
+	    balance ${LOCAL} ${SERVERS}
+	fi
+    else
+	echo "NOTE: Balance is NOT installed. SSH load-balancing will be"
+	echo "disabled for this session. (http://www.inlab.de/balance.html)"
     fi
-else
-    echo "NOTE: Balance is NOT installed. SSH load-balancing will be"
-    echo "disabled for this session. (http://www.inlab.de/balance.html)"
-fi
+}
 
-# There are some major security considerations with this approach that
-# I have still not found a sutable remedy to it.  If you are
-# interested in this problem, please refer to the .ssh/config file for
-# more details.
+# **********************************************************************
+# NOTE: There are some major security considerations with this
+# approach that I have still not found a sutable remedy to it.  If you
+# are interested in this problem, please refer to the .ssh/config file
+# for more details.
+# **********************************************************************
+
+# Since we are running this script on various different machines, it
+# makes sence to have a per-machine list of remove ssh host to draw
+# from. This way my laptop can use load-balance over differnt hosts
+# than my desktop at work does.
+SSH_HOSTS="${HOME}/.ssh-hosts.`hostname -s`"
+if [ -f ${SSH_HOSTS} ]; then
+    build_server_list
+    run_load_balancer
+else
+    echo "Unable to find SSH hosts file: ${SSH_HOSTS}"
+fi
