@@ -8,19 +8,18 @@ due.  For now, just assume far brighter than me wrote all of them.
 
 To use the dot files, you only need to clone the repository:
 
-    git clone git@github.com:versionzero/dotfiles.git
+    $ git clone git@github.com:versionzero/dotfiles.git
 
 Then execute the following two commands:
 
-    cd dotfiles
-    ./install.sh
+    $ cd dotfiles; ./update.sh
 
 That is it!  Just restart your terminal, and you'll have everything up
 and running.  If you make changes to the files in the dotfiles
 directory, and reinstall the resulting changes, you can skip
 restarting the terminal and run the following command:
 
-    source
+    $ source
 
 It is an alias for source that when given no command line options,
 will evaluate the `~/.bash_profile` file automatically in to the
