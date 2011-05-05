@@ -28,7 +28,7 @@ REMOTE=22
 # not ever need to write fail-over code.
 function build_server_list {
     SERVERS=
-    for NAME in `cat ${SSH_HOSTS}`; do
+    for NAME in `cat ${HOST_FILES}`; do
 	SERVERS="${NAME}:${REMOTE} ${SERVERS}"
     done
 }
@@ -64,10 +64,19 @@ function run_load_balancer {
 # makes sence to have a per-machine list of remove ssh host to draw
 # from. This way my laptop can use load-balance over differnt hosts
 # than my desktop at work does.
-SSH_HOSTS="${HOME}/.ssh-hosts.`hostname -s`"
-if [ -f ${SSH_HOSTS} ]; then
+CANDIDATE_HOST_FILES="${HOME}/.ssh-hosts.`hostname -s` ${HOME}/.ssh-hosts.`uname -s`"
+
+# Since we are running this script on various different machines, it
+# makes sence to have a per-machine list of remove ssh host to draw
+# from. This way my laptop can use load-balance over differnt hosts
+# than my desktop at work does.
+HOST_FILES=
+for FILE in ${CANDIDATE_HOST_FILES}; do
+    if [ -f ${FILE} ]; then
+	HOST_FILES="${FILE} ${HOST_FILES}"
+    fi
+done
+if [ "${HOST_FILES}" != "" ]; then
     build_server_list
     run_load_balancer
-else
-    echo "Unable to find SSH hosts file: ${SSH_HOSTS}"
 fi
