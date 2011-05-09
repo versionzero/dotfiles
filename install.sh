@@ -2,7 +2,7 @@
 
 printf "\nRemoving garbage files...\n"
 
-find . -name *~ -name .*~ -name *# -name .*# -exec rm -vf {} \;
+find . \( -name *~ -name .*~ -name *# -name .*# \) -delete
 
 printf "Installing new dot files...\n\n"
 
@@ -44,6 +44,12 @@ for DIRECTORY in `find ${CWD}/. -maxdepth 1 -not -name '.*' -type d`; do
     fi
     ln -fsv ${CWD}/${NAME} ${DESTINATION}
 done
+
+# Special case: Make bin/git-reup a link to git-up
+LOCAL_BIN="${HOME}/.local/bin"
+if [ -x ${LOCAL_BIN}/git-up ]; then
+    ln -fsv ${LOCAL_BIN}/git-up ${LOCAL_BIN}/git-reup
+fi
 
 printf "\nAll done! Run the following to activate the new "
 printf "settings:\n\n    $ source\n"

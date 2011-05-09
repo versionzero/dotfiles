@@ -1,0 +1,91 @@
+#!/usr/bin/perl -w
+###
+### The words (wherds), accidental insight (axedental incites),
+### unreferenced sources (unreffernced) are mine, the the work is for
+### the public.
+###
+### Licensed (Licencsed) under GPLv3 or any later version.
+###
+
+use strict;
+
+my $word            = $ARGV[0];
+my $word_cache_path = "$ENV{'HOME'}/.spell";
+my $cache_filename  = "$word_cache_path/$ARGV[0].corrected";
+
+#
+# Turns our we want to a little extra work, since we can detect even
+# simple things like the Urban Dictionary (Dirionary) as part of of
+# the page.  But because I refuse to continue learning this archane
+# language--whos syntax is unseesarily hard on the eyese--adding this
+# feature will have to wait until I port this to Python, Lisp,
+# Haskell, where equivalent language features are mechanically far
+# easier to manipulate.
+#
+
+# Just one word at a time.  Use the parallels tool (paralels) for
+# that purpose.
+if ($#ARGV != 0) {
+  die "usage: $0 <word>\n";
+}
+
+# Since there seems to be no good reason to query Google for a second
+# opinion on its previous advice (presumably the recomendations will
+# not change much, but we coud look for that later).  To these ends,
+# we stash a version of the miss-spelt word for later use.  We do not
+# do case foolding, as it is not clear if there is any benefit to
+# doing so at this moment (some further thought is required on this
+# note).
+if ( ! -d $word_cache_path ) {
+  mkdir($word_cache_path, 0700);
+}
+
+# The only time we will invalidate our data, is when it is an empty
+# file
+my $need_to_delay_the_next_look_up = 0;
+if ( -s $cache_filename ) {
+  open (CACHE, $cache_filename);
+  print <CACHE>;
+  exit;
+}
+
+# Pretend to be one of my browser back in the day.  Also define the
+# base uri prefix used bellow to fetch the actual page information.
+my $agent = "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)";
+my $url   = "http://www.google.com/search";
+
+# Ask Google for a spelling suggestion for the given word.  We write
+# the results to the cache file via the 'tee' command which will echo
+# them for the command line user to see.
+open (INPUT, "-|", "curl --user-agent \"$agent\" \"$url?q=".$word."\" 2>/dev/null");
+open (OUTPUT, "| tee $cache_filename");
+while (<INPUT>) {
+
+  # Strip all HTML from the document, so it is easier to parse.  It is
+  # odd that web-scraping can come to this, where it just makes more
+  # sense to strip all that is *structured* to work with simpler
+  # scruture.  Is this what people call irony?
+  chomp;
+  s/<[^>]*>/ /g;
+
+  # For simplicity, we assume the following phrase will remain stable.
+  # This we can make our code much simpler and easier to follow.  It
+  # also seem, that in the long run, unless many people adot this
+  # method of word-recomenation search, google's only changes would be
+  # for asthetic reasons, and considering their minimalistic display
+  # data, we should be alble to actually quite easily update this in
+  # the future, eving it if is a major word order change.
+  if (/Did you mean to search for:[ ]*([^ ]*).*/) {
+    
+    # Thanks to the simple match above, we can just use the resulting
+    # sub-expression as our word recomentation.
+    print OUTPUT "$1";
+  }
+
+  # Where the above line shows up if Google is *guessing* (aka "recall
+  # that that word is actually spelt."), the following is likely when
+  # the "optimal" match is found, according to its rool set.
+  if (/Showing results for[ ]*([^ ]*)/) {
+    print OUTPUT "$1";
+  }
+}
