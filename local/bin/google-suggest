@@ -9,10 +9,6 @@
 
 use strict;
 
-my $word            = $ARGV[0];
-my $word_cache_path = "$ENV{'HOME'}/.spell";
-my $cache_filename  = "$word_cache_path/$ARGV[0].corrected";
-
 #
 # Turns our we want to a little extra work, since we can detect even
 # simple things like the Urban Dictionary (Dirionary) as part of of
@@ -28,6 +24,10 @@ my $cache_filename  = "$word_cache_path/$ARGV[0].corrected";
 if ($#ARGV != 0) {
   die "usage: $0 <word>\n";
 }
+
+my $word            = $ARGV[0];
+my $word_cache_path = "$ENV{'HOME'}/.spell";
+my $cache_filename  = "$word_cache_path/$ARGV[0].corrected";
 
 # Since there seems to be no good reason to query Google for a second
 # opinion on its previous advice (presumably the recomendations will
@@ -89,7 +89,7 @@ my @patterns = (
 # Ask Google for a spelling suggestion for the given word.  We write
 # the results to the cache file via the 'tee' command which will echo
 # them for the command line user to see.
-open (INPUT, "-|", "curl --user-agent \"$agent\" \"$url?q=".$word."\" 2>/dev/null");
+open (INPUT, "-|", "curl --user-agent \"$agent\" \"$url?q=$word\" 2>/dev/null");
 open (OUTPUT, "| tee $cache_filename");
 while (<INPUT>) {
   
