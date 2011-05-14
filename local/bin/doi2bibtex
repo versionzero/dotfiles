@@ -56,3 +56,4 @@ open (OUTPUT, "| tee $cache_filename");
 while (<INPUT>) { 
   print OUTPUT $_;
 }
+print OUTPUT "\n";
