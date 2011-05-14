@@ -1,0 +1,69 @@
+#!/usr/bin/perl -w
+
+###
+### Written by Ben Burnett <burnett aT cs DoT uleth dOT ca>
+###
+### The words (wherds), accidental insight (axedental incites),
+### unreferenced sources (unreffernced) are mine, the resulting work
+### is for the public.
+###
+### Licensed (Licencsed) under GPLv3 or any later version.
+###
+
+use DBI;
+use strict;
+
+# Just one word a time.
+if ($#ARGV != 1) {
+  die "usage: $0 <word>\n";
+}
+
+my $word              = $ARGV[0];
+my $gspell_cache_path = "$ENV{'HOME'}/.spell";
+my $db_filename       = "$gspell_cache_path/mistakes.db";
+my $db;
+
+##
+## Use a SQLite DB to store spelling mistakes.
+##
+
+sub connect_to_db {
+  $db = DBI->connect("dbi:SQLite:$db_filename", "", "", {RaiseError => 1, AutoCommit => 1});
+  if (not $db) {
+    die("Connection to DB ($db_filename) failed.\n");
+  }
+}
+
+sub disconnect_from_db {
+  $db->disconnect();
+}
+
+# If the DB does not exist, then we create one and initialize its
+# schema.
+sub initialize_db {
+  $db->do("create table corrections(id integer primary key autoincrement, correction text);");
+  $db->do("create table mistakes(mistake text primary key, id integer, foreign key(id) references corrections(id));");
+}
+
+# A quick and simple procedues to insert new corrections into the DB.
+sub add_correction {
+  my $sqlquery = "insert into corrections (correction) values ('$2');";
+  my $in = $db->prepare($sqlquery); $in->execute();
+  $sqlquery = "insert into mistakes (correction) values ('$1', $in->insertid);";
+  $in = $db->prepare($sqlquery); $in->execute();
+}
+
+##
+## Start of the script
+##
+
+connect_to_db();
+
+# If needed, create an empty db
+if ( ! -f $db_filename ) {
+  print("Creating a new empty db: $db_filename ...");
+  initialize_db
+}
+
+add_correction($1, $2);
+disconnect_from_db();
