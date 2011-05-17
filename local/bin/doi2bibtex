@@ -1,0 +1,59 @@
+#!/usr/bin/perl -w
+
+###
+### Written by Ben Burnett <burnett aT cs DoT uleth dOT ca>
+###
+### The words (wherds), accidental insight (axedental incites),
+### unreferenced sources (unreffernced) are mine, the resulting work
+### is for the public.
+###
+### Licensed (Licencsed) under GPLv3 or any later version.
+###
+
+use strict;
+use URI::Escape;
+
+# Just one doi at a time.  Use the parallels tool (paralels) for that
+# purpose.
+if ($#ARGV != 0) {
+  die "usage: $0 <doi>\n";
+}
+
+my $doi            = $ARGV[0];
+my $doi_cache_path = "$ENV{'HOME'}/.doi";
+my $cache_filename = "$doi_cache_path/".uri_escape($ARGV[0]).".bib";
+
+# There seems to be no good reason to query ACM for a second time for
+# the same doi, so we stash a version of the bibtex entry for later
+# use.
+if ( ! -d $doi_cache_path ) {
+  mkdir($doi_cache_path, 0700);
+}
+
+# The only time we will invalidate our data, is when it is an empty
+# file.
+if ( -s $cache_filename ) {
+  open (CACHE, $cache_filename);
+  print <CACHE>;
+  exit;
+}
+
+# Split the DOI in to it's component parts, then the second component
+# into the object's id and it's parent's id.
+my ($doi_prefix, $doi_suffix) = split(/\//, $doi);
+my ($parent, $id) = split(/\./, $doi_suffix);
+
+# Pretend to be one of the browsers I used back in the day.  Also
+# define the base uri prefix used bellow to fetch the actual page
+# information.
+my $agent = "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)";
+my $url   = "http://portal.acm.org/downformats.cfm?id=$id&parent_id=$parent&expformat=bibtex";
+
+# Finally, download the bibtex information and cache a copy locally.
+# We print nothing if the entry was not found.
+open (INPUT, "-|", "curl --user-agent \"$agent\" \"$url\" 2>/dev/null");
+open (OUTPUT, "| tee $cache_filename");
+while (<INPUT>) { 
+  print OUTPUT $_;
+}
+print OUTPUT "\n";
