@@ -2,7 +2,7 @@
 
 printf "\nRemoving garbage files...\n"
 
-find . \( -name *~ -name .*~ -name *# -name .*# \) -delete
+find . \( -name *~ -or -name .*~ -or -name *# -or -name .*# \) -delete
 
 printf "Installing new dot files...\n\n"
 
