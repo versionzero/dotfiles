@@ -26,7 +26,7 @@ export PATH=${MY_BIN_PATH}:/usr/bin:/usr/sbin:$PATH
 ##
 
 # Cache the system's name
-SYSTEM_NAME=`system-name`
+SYSTEM_NAME=`uname -s`
 
 # Operating system specific environment and customizations.
 SYSTEM_PROFILE="${HOME}/.bash_profile.${SYSTEM_NAME}"
