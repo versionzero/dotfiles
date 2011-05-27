@@ -2,7 +2,7 @@
 --sort-files
 
 # Pipe the output through a pager by default
-# --pager=less
+--pager=less
 
 # Highlight the matching text
 --color
