@@ -117,7 +117,7 @@ export HISTCONTROL=ignoredups
 export HISTIGNORE="&:[bf]g:exit:rmtmp[tex]"
 
 # Have less do things more conscientiously
-export LESS="-X"
+export LESS="-R"
 export PAGER="less"
 
 # Set default file protection mask
