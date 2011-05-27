@@ -58,6 +58,11 @@ fi
 # Paths
 ##
 
+## Binaries
+
+# Add some of the basics
+PATH="/bin:/sbin:$PATH"
+
 ## C/C++ related
 
 # Include files
