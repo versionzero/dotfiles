@@ -16,6 +16,45 @@ function e { emacs "$@" ; }
 eval `dircolors -b`
 
 ##
+# Condor
+##
+
+## Set the root directory for all of our binaries
+BINARIES_ROOT=/home/condor/binaries
+BINARIES_SYSTEM=`uname`-`uname -p`
+
+## Add the Condor binaries to the path
+CONDOR_BINARIES=$BINARIES_ROOT/condor/$BINARIES_SYSTEM
+PATH="$CONDOR_BINARIES/bin:$CONDOR_BINARIES/sbin:$PATH"
+
+## Add CCTOOLS to the path.  This includes niceties like
+## makeflow, wavefront, allpairs, parrot, etc.
+CCTOOLS_HOME=$BINARIES_ROOT/cctools/$BINARIES_SYSTEM
+PATH="$CCTOOLS_HOME/bin:$PATH"
+
+## Add Java/JRE to the path
+JAVA_HOME="/usr/java/jdk1.6.0_13"
+PATH="$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH"
+export JAVA_HOME
+
+## Add Python to the path
+PYTHON_HOME=$BINARIES_ROOT/python/$BINARIES_SYSTEM
+PATH="$PYTHON_HOME/bin:$PATH"
+
+## Add CPLEX to the path and it's license
+CPLEX_HOME=$BINARIES_ROOT/cplex/$BINARIES_SYSTEM
+PATH="$CPLEX_HOME/cplex121/bin/x86_debian4.0_4.1:$PATH"
+ILOG_LICENSE_FILE=$CPLEX_HOME/license/access.ilm
+export ILOG_LICENSE_FILE
+
+## Add MPICH2 to the path
+MPICH2_BINARIES=$BINARIES_ROOT/mpich2/$BINARIES_SYSTEM
+PATH="$MPICH2_BINARIES/bin:$MPICH2_BINARIES/sbin:$PATH"
+
+## Export the new path
+export PATH
+
+##
 # Local Variables: 
 # mode: sh
 # End: 
