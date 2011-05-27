@@ -6,7 +6,7 @@
 # through we have defined the environment correctly.
 LS='/bin/ls -pbF'
 if [ "`uname`" == "Linux" ]; then
-    LS="${LS} --group-directories-first --color=auto"
+    LS="${LS} --color=auto"
 fi
 
 ##
