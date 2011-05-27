@@ -11,8 +11,8 @@ alias h='fc -lr'
 # simple clear screen (ala MS-DOS)
 alias cls='clear'
 
-# grep clourizer
-alias grep='grep --color'
+# use ack instead of grep
+alias grep='ack'
 
 # re-evaluate the bash profile scripts
 function source {
