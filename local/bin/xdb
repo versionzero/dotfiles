@@ -6,7 +6,7 @@
 # Fons Rademakers, 30/6/2010.
 
 # Change this to the location of your debug-template.xcodeproj
-xcodetemplate=/Users/rdm/dropbox/debug-template.xcodeproj
+xcodetemplate=${HOME}/.local/share/xdb/debug-template.xcodeproj
 
 # The rest should be left unchanged, unless there are bugs to be fixed ;-)
 
