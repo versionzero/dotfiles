@@ -116,6 +116,10 @@ export HISTSIZE=1000
 export HISTCONTROL=ignoredups
 export HISTIGNORE="&:[bf]g:exit:rmtmp[tex]"
 
+# Have less do things more conscientiously
+export LESS="-R"
+export PAGER="less"
+
 # Set default file protection mask
 ##
 # 077 = rwx ___ ___ (no access at all for group & others)

@@ -2,10 +2,12 @@
 --sort-files
 
 # Pipe the output through a pager by default
---pager=less
+--pager='less -r'
 
 # Highlight the matching text
 --color
+--color-match
+bold red
 
 # Print 1 line of context before and after a matching line
 --context=1
@@ -23,3 +25,6 @@
 # Ignore vendor/ and log/ by default, for Rails projects
 --ignore-dir=vendor
 --ignore-dir=log
+
+# Ignore .dSYM directories, for debug symbols
+--ignore-dir=*.dSYM

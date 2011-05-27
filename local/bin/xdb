@@ -1,0 +1,79 @@
+#! /bin/bash
+#
+# Create Xcode debug environment. To be called as:
+#   xdb <executable> [<arg1>...<argn>]
+#
+# Fons Rademakers, 30/6/2010.
+
+# Change this to the location of your debug-template.xcodeproj
+xcodetemplate=${HOME}/.local/share/xdb/debug-template.xcodeproj
+
+# The rest should be left unchanged, unless there are bugs to be fixed ;-)
+
+usage="$0 <executable> [<arg1>...<argn>]"
+
+# Check arguments
+if [ $# -lt 1 ]; then
+   echo Usage: $usage
+   exit 1
+fi
+
+# Set exe and exepath
+exe=$1; shift
+exepath=`which $exe`
+if [ -z $exepath ]; then
+   echo "$0: $exe is not an executable"
+   exit 1
+fi
+case $exepath in
+/*)  ;;
+ *)  exepath=`pwd`/$exepath ;;
+esac
+exe=`basename $exe`
+
+# Set rundir
+rundir=`pwd`
+
+# Set arguments
+args=""
+while test $# -ge 1; do
+   args="$args $1"
+   shift
+done
+
+xcodeproj=debug-$exe.xcodeproj
+pbxuser=$xcodeproj/rdm.pbxuser
+pbxtmp=$xcodeproj/pbxuser-tmp
+
+# Copy template xcode project to current directory if it does not yet exist
+if [ ! -d debug-$exe.xcodeproj ]; then
+   cp -a $xcodetemplate $xcodeproj
+   echo "Created: $xcodeproj"
+else
+   echo "Using: $xcodeproj"
+fi
+
+# Set the executable in the rdm.pbxuser file
+sed -e "s@/Users/rdm/dummy.exe@$exepath@" $pbxuser > $pbxtmp
+sed -e "s@dummy.exe@$exe@g" $pbxtmp > $pbxuser
+
+# Set rundir
+sed -e "s@dummydir@$rundir@" $pbxuser > $pbxtmp
+
+# Set the arguments in the rdm.pbxuser file
+sed -e "s@dummyarg@$args@" $pbxtmp > $pbxuser
+
+# Set the environment in the pxbuser file
+env | awk '{ print $1 }' > ${pbxtmp}-1
+cat ${pbxtmp}-1 | awk -F= '/DISPLAY/||/HOME/||/ROOTSYS/||/DYLD_LIBRARY_PATH/ { printf("\t\t\t{\n\t\t\t\tactive = YES;\n\t\t\t\tname = %s;\n\t\t\t\tvalue = %s;\n\t\t\t},\n", $1, $2); }' > ${pbxtmp}-2
+
+# Insert file pbxtmp-2 into pbxuser at location "dummyenv"
+perl -pi -e "s@dummyenv@`cat ${pbxtmp}-2`@" $pbxuser
+
+# Cleanup tmp
+rm -f $pbxtmp ${pbxtmp}-1 ${pbxtmp}-2
+
+# Start Xcode
+open $xcodeproj
+
+exit 0
