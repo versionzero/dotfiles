@@ -22,8 +22,8 @@ the terminal, you run the following command:
 
     $ source
 
-It is an alias for `source` that---when given no command line
-options---will evaluate the `~/.bash_profile` file automatically.
+It is an alias for `source` that&mdash;when given no command line
+options&mdash;will evaluate the `~/.bash_profile` file automatically.
 Simply put: all your changes will be immediately available.
 
 If you have any comments or improvements, just push them my way.
