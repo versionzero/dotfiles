@@ -8,18 +8,18 @@
 
 function makepdf { 
     NAME=${1%\.*}
-    if [[ ! -f ${NAME}.aux ]]; then
-	latex ${NAME}
-    fi
+    TOOL=${2:-pdflatex}
     if [[ -f ${NAME}.bib ]]; then
+	${TOOL} ${NAME}
 	rm -f ${NAME}.bbl
-	while [[ ! -e ${NAME}.bbl ]]; do
-	    bibtex ${NAME}
-	done
-	latex ${NAME}
+	bibtex ${NAME}
+	${TOOL} ${NAME}
     fi
-    if latex ${NAME}; then
-	dvipdf ${NAME}
+    ${TOOL} ${NAME}
+    if [ "${TOOL}" == "latex" ]; then
+	if ${TOOL} ${NAME}; then
+	    dvipdf ${NAME}
+	fi
     fi
 }
 
