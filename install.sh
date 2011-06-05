@@ -45,11 +45,10 @@ for DIRECTORY in `find ${CWD}/. -maxdepth 1 -not -name '.*' -type d`; do
     ln -fsv ${CWD}/${NAME} ${DESTINATION}
 done
 
-# Special case: Make bin/git-reup a link to git-up
+# Special cases: Make some links in ~/.local/bin
 LOCAL_BIN="${HOME}/.local/bin"
-if [ -x ${LOCAL_BIN}/git-up ]; then
-    ln -fsv ${LOCAL_BIN}/git-up ${LOCAL_BIN}/git-reup
-fi
+ln -fsv ${LOCAL_BIN}/git-up ${LOCAL_BIN}/git-reup
+ln -fsv ${LOCAL_BIN}/group-spell-suggest ${LOCAL_BIN}/suggest
 
 printf "\nAll done! Run the following to activate the new "
 printf "settings:\n\n    $ source\n"
