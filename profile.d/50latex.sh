@@ -10,8 +10,8 @@ function makepdf {
     NAME=${1%\.*}
     TOOL=${2:-pdflatex}
     if [[ -f ${NAME}.bib ]]; then
-	${TOOL} ${NAME}
 	rm -f ${NAME}.bbl
+	${TOOL} ${NAME}
 	bibtex ${NAME}
 	${TOOL} ${NAME}
     fi
@@ -26,7 +26,9 @@ function makepdf {
 function openpdf {
     NAME=${1%\.*}    
     if makepdf ${NAME}; then
-	open ${NAME}.pdf
+	if [[ -f ${NAME}.pdf ]]; then
+	    open ${NAME}.pdf
+	fi
     fi
 }
 
