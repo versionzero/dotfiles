@@ -7,7 +7,7 @@ pushd ${DIR} >/dev/null
 printf "\nPulling latest dot files...\n"
 
 # Pull the latest version of the dot file
-git pull
+git reup
 
 # Now, install them
 ./install.sh
