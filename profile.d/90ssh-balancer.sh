@@ -21,6 +21,13 @@
 LOCAL=2222
 REMOTE=22
 
+# It appears that Balance now needs IPv6 addresses. To fix this
+# problem for v4 addresses add ::ffff: to the beginning of your
+# address.
+if [[ "`uname -s`" == "Linux" ]]; then
+    LOCAL="-b ::ffff:`hostname` ${LOCAL}"
+fi
+
 # Build a list of all the destination servers we will "load balance"
 # over.  Basically we will just round-robin over them, and if one is
 # down, we will just move on to the next.  This makes it dead simple
