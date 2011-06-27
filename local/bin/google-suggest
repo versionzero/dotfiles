@@ -45,7 +45,6 @@ if ( ! -d $word_cache_path ) {
 
 # The only time we will invalidate our data, is when it is an empty
 # file
-my $need_to_delay_the_next_look_up = 0;
 if ( -s $cache_filename ) {
   open (CACHE, $cache_filename);
   print <CACHE>;
