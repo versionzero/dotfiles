@@ -1,0 +1,9 @@
+#!/bin/bash
+##
+# Quick and dirty command to edit *.plist files.
+# NOTE: It is not clear if this will destroy data or not, use with at your own risk
+##
+
+plutil -convert xml1 ${1}
+emacs -mw ${1}
+plutil -convert binary1 ${1}
