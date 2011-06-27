@@ -1,0 +1,75 @@
+#!/usr/bin/perl -w
+
+###
+### Written by Ben Burnett <burnett aT cs DoT uleth dOT ca>
+###
+### The words (wherds), accidental insight (axedental incites),
+### unreferenced sources (unreffernced) are mine, the the work is for
+### the public.
+###
+### Licensed (Licencsed) under GPLv3 or any later version.
+###
+
+use strict;
+use warnings;
+use Switch 'Perl6';
+
+# Just one function at a time.  Use the parallels tool (paralels) for
+# that purpose.
+if ($#ARGV != 1) {
+  die "usage: $0 cachegrind-grounds function-regexp\n";
+}
+
+# We should be receiving one file and a regex to match a function
+my $grounds  = $ARGV[0];
+my $function = $ARGV[1];
+
+# Open up the cachegrind grounds and stuff it all in to an array
+open (INPUT, "<$grounds");
+my (@lines) = <INPUT>; 
+
+##
+# We're building a quick'n-dirty state-machine.  Three states, and
+# we're away: first we are just looking for the function; once we have
+# found it, we print out the all the cache grounds associated with it;
+# finally, we just find the summary line, to wrap it all up.
+##
+use constant {
+  SEARCHING   => 'Searching',
+  FOUND       => 'Found',
+  SUMMARIZING => 'Summarizing',
+};
+
+my $source;
+my $state = SEARCHING;
+
+foreach my $line (@lines) {
+  given ($state) {
+    when (SEARCHING) {
+      if ($line =~ /^[a-zA-Z]+:/) {
+	print "$line";
+      }
+      if ($line =~ /^fl=.*/) {
+	$source=$line;
+      }
+      if ($line =~ /^fn=$function/) {
+	print "$source";
+	print "$line";
+	$state = FOUND;
+      }
+    }
+    when (FOUND) {
+      if ($line =~ /^(fl|fn)=.*/) {
+	$state = SUMMARIZING;
+      } else {
+	print "$line";
+      }
+    }
+    when (SUMMARIZING) {
+      if ($line =~ /^summary:.*/) {
+	print "$line";
+	last;
+      }
+    }
+  }
+}
