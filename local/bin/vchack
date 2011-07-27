@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# vchack - add track names and numbers to flac files
+#
+if [ "$1" ]
+then
+  for file
+  do
+    if [ -e "$file" ]
+    then
+      metaflac \
+        --set-vc-field=TITLE="$(echo "$file" |
+          sed 's/...\(.*\)\.flac/\1/')" \
+        --set-vc-field=TRACKNUMBER="$(echo "$file" |
+          sed 's/\(..\).*/\1/' |
+          sed 's/0\(.\)/\1/')" \
+        "$file"
+    else
+      echo >&2 "No such file: "$1""
+      exit 1
+    fi
+  done
+else
+  echo >&2 "Usage: "$(basename "$0")" INPUTFILE [...]"
+  exit 1
+fi

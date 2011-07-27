@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# vcid3 - convert vorbis comments to id3 tags
+#
+if [ -e "$1" ]
+then
+  if [ -e "$2" ]
+  then
+    TITLE="$(metaflac --show-vc-field=TITLE "$1" |
+      sed 's/TITLE=\(.*\)/\1/')"
+    ARTIST="$(metaflac --show-vc-field=ARTIST "$1" |
+      sed 's/ARTIST=\(.*\)/\1/')"
+    ALBUM="$(metaflac --show-vc-field=ALBUM "$1" |
+      sed 's/ALBUM=\(.*\)/\1/')"
+    TRACK="$(metaflac --show-vc-field=TRACKNUMBER "$1" |
+      sed 's/TRACKNUMBER=\(.*\)/\1/')"
+    YEAR="$(metaflac --show-vc-field=DATE "$1" |
+      sed 's/DATE=\(.*\)/\1/')"
+    GENRE="$(metaflac --show-vc-field=GENRE "$1" |
+      sed 's/GENRE=\(.*\)/\1/')"
+    if [ "$GENRE" ]
+    then
+      id3tool --set-genre-word="$GENRE" "$2"
+    fi
+    id3tool \
+      --set-title="$TITLE" \
+      --set-artist="$ARTIST" \
+      --set-album="$ALBUM" \
+      --set-track="$TRACK" \
+      --set-year="$YEAR" \
+      "$2"
+  else
+    echo >&2 "No such file: "$2""
+    echo >&2 "Usage: "$(basename "$0")" FLACFILE MP3FILE"
+    exit 1
+  fi
+else
+  echo >&2 "No such file: "$1""
+  echo >&2 "Usage: "$(basename "$0")" FLACFILE MP3FILE"
+  exit 1
+fi

@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# lameit - rip a cd to lame-encoded mp3s
+#
+if [ "$1" ]
+then
+  for file in "$1"/[1-9]\ *.aiff
+  do
+    if [ -e "$file" ]
+    then
+      lame -h -m s -b 192 "$file" "0$(basename "$file" .aiff).mp3"
+    else
+      echo >&2 "No appropriate files exist in directory: "$1""
+      exit 1
+    fi
+  done
+  for file in "$1"/[1-9][0-9]\ *.aiff
+  do
+    if [ -e "$file" ] 
+    then
+      lame -h -m s -b 192 "$file" "$(basename "$file" .aiff).mp3"
+    fi
+  done
+else
+  echo >&2 "Usage: "$(basename "$0")" /path/to/cd"
+  exit 1
+fi
+
