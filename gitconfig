@@ -77,9 +77,9 @@
 	ui = auto
 	
 [color "branch"]
-	current = yellow reverse
+	current = green
 	local = yellow
-	remote = green
+	remote = red
 
 [advice]
 	pushNonFastForward = false
@@ -87,7 +87,7 @@
 	
 [color "diff"]
 	meta = yellow
-	frag = magenta 
+	frag = magenta
 	old = red 
 	new = green
 	
