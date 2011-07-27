@@ -38,6 +38,6 @@
    (setq time (time-now))) 
 
 ;; bind M-b to switch buffers
-;(global-set-key "\M-b" 'bubble-buffer)
+(global-set-key "\M-b" 'bubble-buffer)
 
 (provide 'bubble-buffer)
