@@ -14,6 +14,7 @@
 	b = branch
 	c = commit
 	ca = commit --amend
+	cl = clone
 	changes = diff --name-status -r
 	co = checkout
 	cpc = cherry-pick
@@ -36,7 +37,7 @@
 	rbs = rebase --skip
 	rh = reset --hard
 	ru = remote update --prune
-	s = status
+	s = status -sb
 	sl = shortlog
 	sm = submodule
 	sma = submodule add
@@ -72,6 +73,7 @@
 
 [branch]
 	autosetupmerge = true
+	autosetuprebase = always
 
 [color]
 	ui = auto
