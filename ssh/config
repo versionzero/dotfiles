@@ -61,7 +61,7 @@ Host github.com
      IdentityFile ~/.private/git_hub
      
 Host moe
-     HostName moe-wired
+     HostName moe
      User benner
 
 Host ec2
