@@ -6,10 +6,20 @@
 # LaTeX
 ##
 
+function cleanpdf { 
+    NAME=${1%\.*}
+    rubber --clean ${NAME}
+    rm -f ${NAME}.pdf
+}
+
 function makepdf { 
     NAME=${1%\.*}
-    rm -f ${NAME}.pdf
-    rubber --pdf ${NAME}
+    pdflatex ${NAME}.tex
+    if [ -f ${NAME}.aux -a -f ${NAME}.bib ]; then
+	bibtex ${NAME}.aux
+	pdflatex ${NAME}.tex
+    fi
+    pdflatex ${NAME}.tex
 }
 
 function openpdf {
@@ -19,6 +29,10 @@ function openpdf {
 	open ${NAME}.pdf
     fi
 }
+
+alias clp=cleanpdf
+alias mp=makepdf
+alias op=openpdf
 
 ##
 # EOF
