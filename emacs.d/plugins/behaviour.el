@@ -5,13 +5,13 @@
 ;;
 
 ; no one-buffer-per-frame
-(one-buffer-one-frame-mode -1)
+;(one-buffer-one-frame-mode 0)
 
 ; do not open certain buffers in special windows/frames
 (setq special-display-regexps nil) 
 
 ; do not place frames behind the Dock or outside of screen boundaries
-(smart-frame-positioning-mode -1)
+;(smart-frame-positioning-mode nil)
 
 ;; Don't %#@%! BEEP!!
 (setq-default visible-bell t)

@@ -6,7 +6,7 @@
 ;;
 
 ;; No Mac-specific key bindings
-(osx-key-mode -1) 
+;(osx-key-mode -1) 
 
 ;;
 ;; Make Aquamacs less UNIX'y
