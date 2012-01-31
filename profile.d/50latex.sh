@@ -15,6 +15,9 @@ function cleanpdf {
 function makepdf { 
     NAME=${1%\.*}
     pdflatex ${NAME}.tex
+    if [ -f ${NAME}-*.asy ]; then
+	asy ${NAME}-*.asy
+    fi
     if [ -f ${NAME}.aux -a -f ${NAME}.bib ]; then
 	bibtex ${NAME}.aux
 	pdflatex ${NAME}.tex
