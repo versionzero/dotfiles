@@ -81,6 +81,40 @@ LIBRARY_PATH=$MY_LIB_PATH:$LIBRARY_PATH
 export LIBRARY_PATH
 
 ##
+# Condor
+##
+
+## Set the root directory for all of our binaries
+BINARIES_ROOT=/home/condor/binaries
+BINARIES_SYSTEM=`uname`-`uname -p`
+
+## Add the Condor binaries to the path
+CONDOR_BINARIES=$BINARIES_ROOT/condor/$BINARIES_SYSTEM
+PATH="$CONDOR_BINARIES/bin:$CONDOR_BINARIES/sbin:$PATH"
+
+## Add CCTOOLS to the path.  This includes niceties like
+## makeflow, wavefront, allpairs, parrot, etc.
+CCTOOLS_HOME=$BINARIES_ROOT/cctools/$BINARIES_SYSTEM
+PATH="$CCTOOLS_HOME/bin:$PATH"
+
+## Add Python to the path
+PYTHON_HOME=$BINARIES_ROOT/python/$BINARIES_SYSTEM
+PATH="$PYTHON_HOME/bin:$PATH"
+
+## Add CPLEX to the path and it's license
+CPLEX_HOME=$BINARIES_ROOT/cplex/$BINARIES_SYSTEM
+PATH="$CPLEX_HOME/cplex121/bin/x86_debian4.0_4.1:$PATH"
+ILOG_LICENSE_FILE=$CPLEX_HOME/license/access.ilm
+export ILOG_LICENSE_FILE
+
+## Add MPICH2 to the path
+MPICH2_BINARIES=$BINARIES_ROOT/mpich2/$BINARIES_SYSTEM
+PATH="$MPICH2_BINARIES/bin:$MPICH2_BINARIES/sbin:$PATH"
+
+## Export the new path
+export PATH
+
+##
 # X11
 ##
 
@@ -98,10 +132,10 @@ fi
 # set a fancy prompt (non-colour, unless we know we "want" colour)
 case "$TERM" in
     xterm*|screen)
-	PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u\[\e[33m\]@\[\e[32m\]\h\[\e[0m\]:\[\e[33m\]\w\[\e[0m\]\n\$ '
+	PS1='\[\e]0;\w\a\]\n\[\e[32m\]\u\[\e[33m\]@\[\e[32m\]\h\[\e[0m\]:\[\e[33m\]\w\[\033[0;31m\]`__git_ps1`\[\e[0m\]\n\$ '
 	;;
     *)
-	PS1="[\u@\h \W]\n\$ "
+	PS1="[\u@\h`__git_ps1` \W]\n\$ "
 	;;
 esac
 export PS1
