@@ -66,6 +66,14 @@ my $suggestion = $word;
 # Wikipedia, and Urban Dictionary, etc.
 my @patterns = (
 
+# It seems that we can take advantage of the information the Google
+# search engine leaks when it returns results.  The word that
+# tipically is most significant to a document is bolded.  This means
+# that we can simply pick one or more of the bolded results.  For now
+# we will pic the first link, and see how this works.
+
+#		(Birthday - Wikipedia, the free encyclopedia
+
 # For simplicity, we assume the following phrase will remain stable.
 # This we can make our code much simpler and easier to follow.  It
 # also seem, that in the long run, unless many people adot this method
