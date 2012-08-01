@@ -8,6 +8,8 @@
 --color
 --color-match
 bold red
+--color-lineno
+bold blue
 
 # Print 1 line of context before and after a matching line
 --context=1
@@ -22,9 +24,14 @@ bold red
 # Introduce Haml to ack
 --type-set=haml=.haml
 
-# Ignore vendor/ and log/ by default, for Rails projects
+# Ignore vendor/, log/ and .git/
 --ignore-dir=vendor
 --ignore-dir=log
+--ignore-dir=.git
 
 # Ignore .dSYM directories, for debug symbols
 --ignore-dir=*.dSYM
+
+# Ignore case in the search strings if PATTERN contains no uppercase
+# characters.
+--smart-case

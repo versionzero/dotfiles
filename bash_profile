@@ -21,6 +21,13 @@ MY_LOCAL_PATH="$HOME/.local"
 MY_BIN_PATH="$MY_LOCAL_PATH/bin"
 export PATH=${MY_BIN_PATH}:/usr/bin:/usr/sbin:$PATH
 
+# Local srilm binaries
+SRILM_PATH="~/.local/srilm/bin"
+if [ -d ${SRILM_PATH} ]; then
+    echo `uname -s`
+    PATH=${SRILM_PATH}:${SRILM_PATH}/macosx:${SRILM_PATH}/macosx_l:$PATH
+fi
+
 ##
 # Profiles
 ##

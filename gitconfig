@@ -46,6 +46,7 @@
 	stc = stash clear
 	stl = stash list
 	stp = stash pop
+	t = "!git checkout --track -b $1 ${2:-origin}/$1"
 	unadd = reset HEAD
 	ua = reset HEAD
 	undo = reset --soft HEAD^	
@@ -53,6 +54,7 @@
 	wds = diff --color-words --staged
 	b2t = "!f() { git tag -m \"$2\" $1-TAG $1  &&  git branch -D $1; }; f"
 	t2r = "!f() { git branch ${1%-TAG} $1  &&  git tag -d $1; }; f"
+	conflicts = !git ls-files -u | cut -f 2 | sort -u
 
 [advice]
 	pushNonFastForward = false
@@ -109,7 +111,7 @@
 
 [core]
 	editor = emacs
-	excludesfile = ~/.gitignore
+	excludesfile = /Users/benner/.gitignore
 	whitespace = trailing-space,space-before-tab
 	quotepath = false
 
@@ -124,3 +126,9 @@
 
 [github]
 	user = versionsero
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true

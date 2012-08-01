@@ -31,9 +31,15 @@ if [ -d "${FUSION_PATH}" ]; then
 fi
 
 # OS X Developer tools
-OSXDEV_PATH=/Developer
+OSXDEV_PATH=/Applications/Xcode.app/Contents/Developer
 if [ -d ${OSXDEV_PATH} ]; then
     PATH=${OSXDEV_PATH}/Tools:${OSXDEV_PATH}/usr/bin:${OSXDEV_PATH}/usr/sbin:$PATH
+fi
+
+# Local srilm binaries
+SRILM_PATH=~/.local/srilm/bin
+if [ -d ${SRILM_PATH} ]; then
+    PATH=${SRILM_PATH}:${SRILM_PATH}/macosx:${SRILM_PATH}/macosx_l:$PATH
 fi
 
 # Export the new path

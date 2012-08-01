@@ -22,6 +22,9 @@ function makepdf {
     if [ -f ${NAME}-*.asy ]; then
 	asy ${NAME}-*.asy
     fi
+    if [ -f ${NAME}.idx ]; then
+	makeindex ${NAME}.idx
+    fi
     if [ -f ${NAME}.aux -a -f ${NAME}.bib ]; then
 	bibtex ${NAME}.aux
 	mypdflatex ${NAME}.tex

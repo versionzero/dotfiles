@@ -15,8 +15,11 @@
 
 ;; Set up our various directories to load
 (add-to-list 'load-path plugin-dir)
-
 (require 'initialize)
+
+;; Enable syntax highlighting
+(global-font-lock-mode t)
+(setq font-lock-maximum-decoration t)
 
 ;; Local Variables:
 ;; mode: Emacs-Lisp

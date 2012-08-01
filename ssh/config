@@ -111,6 +111,16 @@ Host burnett
      # strict security.
      NoHostAuthenticationForLocalhost yes
 
-Host tonic
-     HostName tonic.cs.wisc.edu
+Host office
+     HostName burnett4-mat10
+     User benner
+     Port 22
+     # I actually really just want to hop from the public facing linux
+     # machines to my office machine
+     ProxyCommand ssh -q burnett nc -p0 %h %p
+
+Host medusa
+     HostName medusa.cs.uleth.ca
      User burnett
+     Port 22
+     ProxyCommand ssh -q burnett nc -p0 %h %p

@@ -36,12 +36,14 @@
 (require 'setup-hs-blocks)
 (require 'setup-iswitch-mode)
 (require 'setup-ido)
+(require 'setup-js2-mode)
 (require 'setup-org-mode)
 (require 'setup-yaml-mode)
 (require 'security)
 (require 'personal)
 (require 'prefer-utf)
 (require 'useful-functions)
+(require 'markdown)
 
 ;; Initialize!
 (provide 'initialize)

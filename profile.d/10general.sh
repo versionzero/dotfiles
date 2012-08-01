@@ -12,7 +12,10 @@ alias h='fc -lr'
 alias cls='clear'
 
 # use ack instead of grep
-alias grep='ack'
+#alias grep='ack'
+
+# get my external IP
+alias myip='curl ifconfig.me'
 
 # re-evaluate the bash profile scripts
 function source {

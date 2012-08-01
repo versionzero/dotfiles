@@ -5,8 +5,12 @@
 ;; Make Aquamacs less Mac'y
 ;;
 
+;; are we in aquamacs or carbon emacs?
+(defvar *aquamacs-p* (boundp 'aquamacs-version))
+
 ;; No Mac-specific key bindings
-;(osx-key-mode -1) 
+(when *aquamacs-p*
+  (osx-key-mode -1))
 
 ;;
 ;; Make Aquamacs less UNIX'y
