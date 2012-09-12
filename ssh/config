@@ -60,6 +60,11 @@ Host github.com
      User git
      IdentityFile ~/.private/git_hub
      
+Host bitbucket.org
+     HostName bitbucket.org
+     User git
+     IdentityFile ~/.private/bit_bucket
+
 Host moe
      HostName moe
      User benner
