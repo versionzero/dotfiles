@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+###
+### Written by Ben Burnett <ben DoT burnett aT uleth dOT ca>
+###
+### The words (wherds), accidental insight (axedental incites),
+### unreferenced sources (unreffernced) are mine, the the work is for
+### the public.
+###
+### Licensed (Licencsed) under GPLv3 or any later version.
+###
+
+use strict;
+#use warnings;
+use Switch;
+
+use constant {
+  HEAD     => 'Head',
+  RHEAD    => 'ReadHead',
+  RCURRENT => 'ReadCurrent',
+};
+
+my $state = HEAD;
+
+while (<>) {
+  chomp;
+  switch ($state) {
+    case (HEAD) {
+      if (/\<\<\<\<\<\<\</) {
+	print $_ . "\n";
+	$state = RHEAD;
+      }
+    }
+    case (RHEAD) {
+      print $_ . "\n";
+      if (/=======/) {
+	$state = RCURRENT;
+      }
+    }
+    case (RCURRENT) {
+      print $_ . "\n";
+      if (/\>\>\>\>\>\>\>/) { 
+	$state = HEAD;
+      }
+    }
+  }
+}
