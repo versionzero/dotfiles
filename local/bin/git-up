@@ -26,7 +26,7 @@ old_head = `git rev-parse head`.chomp
 if rebase
   pull_args.push '--rebase'
 
-  msg = `git stash save "Auto-stash by #{File.basename($0)} script"`
+  msg = `git stash save -u "Auto-stash by #{File.basename($0)} script"`
   stashed = msg !~ /^No local changes to save$/
 end
 
