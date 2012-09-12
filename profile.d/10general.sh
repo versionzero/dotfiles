@@ -29,6 +29,9 @@ alias m='make'
 # short version of git
 alias g='git'
 
+# Autocomplete for 'g' as well
+complete -o default -o nospace -F _git g
+
 ## ssh helper: the school computers don't understand the xterm-color termcap
 ## so we just change it when we use ssh
 function ssh { 
