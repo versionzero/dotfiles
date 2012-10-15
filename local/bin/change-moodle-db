@@ -14,16 +14,12 @@
 ## Global variables
 ##
 
-# Save the current working directory
-OLDPWD=$PWD
-
 ##
 ## Simple helpers
 ##
 
 function error {
     printf "$@" 2>&1;
-    cd $OLDPWD;
 }
 
 function die {
@@ -37,7 +33,7 @@ function die {
 
 # There can be only one--one DB, that is.
 if [ $# -ne 1 ]; then
-  die "usage: `basename $0` <database>\n"
+    die "usage: `basename $0` <database>\n"
 fi
 
 # Try to find Moodle's config.php file.  In some cases, we may be deep
