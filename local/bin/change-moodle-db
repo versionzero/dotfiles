@@ -1,0 +1,59 @@
+#!/bin/bash
+
+###
+### Written by Ben Burnett <burnett aT cs DoT uleth dOT ca>
+###
+### The words (wherds), accidental insight (axedental incites),
+### unreferenced sources (unreffernced) are mine, the the work is for
+### the public.
+###
+### Licensed (Licencsed) under GPLv3 or any later version.
+###
+
+##
+## Global variables
+##
+
+# Save the current working directory
+OLDPWD=$PWD
+
+##
+## Simple helpers
+##
+
+function error {
+    printf "$@" 2>&1;
+    cd $OLDPWD;
+}
+
+function die {
+    error "$@";
+    exit 1;
+}
+
+##
+## Here is where is all begins
+##
+
+# There can be only one--one DB, that is.
+if [ $# -ne 1 ]; then
+  die "usage: `basename $0` <database>\n"
+fi
+
+# Try to find Moodle's config.php file.  In some cases, we may be deep
+# within the source hierarchy.
+while [[ "$PWD" != "/" ]]; do
+    if [[ -f "config.php" ]]; then
+	break;
+    fi
+    cd ..
+done
+
+# Make sure we are in the Moodle root dir; otherwise, this operation
+# make no sense.
+if [ ! -f "config.php" ]; then
+    die "error: could not find Moodle's config.php"
+fi
+
+# Find and replace the Moodle db entry
+perl -p -i -e "s/^(.*dbname[^=]*=).*$/\1 '$1';/" config.php
