@@ -1,8 +1,0 @@
-;; Saved Frame Positions
-
-
-(if (fboundp (quote smart-frame-set-initial-frame-alist)) (smart-frame-set-initial-frame-alist (quote ((left . 34) (top . 40) (width . 88) (height . 49)))))
-
-
-
-(setq smart-frame-prior-positions (quote (("*Messages*" (left . 5) (top . 73) (width . 150) (height . 43)) ("*Customize Group: Emacs*" (left . 692) (top . 27) (width . 81) (height . 40)) ("keyboard-bindings.el" (left . 64) (top . 66) (width . 81) (height . 40)) ("*Help*" (left . 893) (top . 30) (width . 75) (height . 30)) (".abbreviations.el" (left . 64) (top . 66) (width . 75) (height . 30)) ("*scratch*" (left . 71) (top . 53) (width . 106) (height . 44)) ("setup-abbrev-mode.el" (left . 671) (top . 33) (width . 104) (height . 44)) (" SPEEDBAR" (left . 663) (top . 92) (width . 20) (height . 36)) ("find-optimal.cc" (left . 797) (top . 62) (width . 86) (height . 46)) ("*About Aquamacs Emacs*" (left . 797) (top . 62) (width . 75) (height . 40)) ("jmorecfg.h" (left . 794) (top . 66) (width . 83) (height . 46)) ("image_copy.cc" (left . 797) (top . 62) (width . 86) (height . 46)) ("image_write.cc" (left . 797) (top . 62) (width . 86) (height . 46)) ("ftw" (left . 776) (top . 83) (width . 86) (height . 46)) ("Makefile" (left . 625) (top . 82) (width . 86) (height . 46)) ("image_measures.cc" (left . 625) (top . 82) (width . 86) (height . 46)) (".gitignore" (left . 753) (top . 77) (width . 89) (height . 46)) ("test" (left . 753) (top . 57) (width . 89) (height . 46)) ("alias.sh" (left . 753) (top . 57) (width . 89) (height . 46)) (".bash_profile" (left . 15) (top . 42) (width . 91) (height . 45)))))
