@@ -75,8 +75,9 @@ Host ec2
      User ec2-user
 
 Host www
-     Hostname ssh.supremecenter107.com
+     Hostname ssh.web8.us.cloudlogin.co
      User benner
+     Port 2222
 
 Host condor
      HostName localhost
@@ -117,12 +118,12 @@ Host burnett
      NoHostAuthenticationForLocalhost yes
 
 Host office
-     HostName burnett4-mat10
+     HostName burnetb-itd12.cserve.uleth.ca
      User benner
      Port 22
      # I actually really just want to hop from the public facing linux
      # machines to my office machine
-     ProxyCommand ssh -q burnett nc -p0 %h %p
+     #ProxyCommand ssh -q burnett nc -p0 %h %p
 
 Host medusa
      HostName medusa.cs.uleth.ca
