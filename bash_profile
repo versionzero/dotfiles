@@ -118,6 +118,12 @@ export ILOG_LICENSE_FILE
 MPICH2_BINARIES=$BINARIES_ROOT/mpich2/$BINARIES_SYSTEM
 PATH="$MPICH2_BINARIES/bin:$MPICH2_BINARIES/sbin:$PATH"
 
+##
+# Python
+##
+
+PATH="${PATH}:/usr/local/share/python"
+
 ## Export the new path
 export PATH
 
