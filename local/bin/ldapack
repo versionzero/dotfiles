@@ -1,0 +1,17 @@
+#!/bin/sh
+
+VERBOSE='-LLL'
+if [ "$1" = "-v" ]; then
+    shift
+    VERBOSE=
+fi
+
+URI="ldap://dc1.uleth.ca"
+BINDDN="CN=NSUMReader,CN=Users,DC=uleth,DC=ca"
+BASEDN="ou=users,ou=campus,dc=uleth,dc=ca"
+PASSWD="rabbit"
+FILTER=${@:-"(sAMAccountName=ben.burnett)"}
+
+##
+# Run the actual search
+ldapsearch ${VERBOSE} -H ${URI} -D ${BINDDN} -b ${BASEDN} -w ${PASSWD} ${FILTER}
