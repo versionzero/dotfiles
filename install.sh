@@ -45,8 +45,8 @@ for DIRECTORY in `find ${CWD}/. -maxdepth 1 -not -name '.*' -type d`; do
     ln -fsv ${CWD}/${NAME} ${DESTINATION}
 done
 
-# Special cases: Make some links in ~/.local/bin
-LOCAL_BIN="${HOME}/.local/bin"
+# Special cases: Make some links in ~/bin
+LOCAL_BIN="${HOME}/bin"
 ln -fsv ${LOCAL_BIN}/git-up ${LOCAL_BIN}/git-reup
 ln -fsv ${LOCAL_BIN}/group-spell-suggest ${LOCAL_BIN}/suggest
 

@@ -1,0 +1,17 @@
+
+# Example aliases
+#alias zshconfig="mate ~/.zshrc"
+#alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Stop mkdir from spell-checking its arguments
+alias mkdir='nocorrect mkdir'
+
+# Fast access to `emacs`
+function a { open -a "Aquamacs" "$@" ; }
+function e { emacs "$@" ; }
+
+# Make the `more` command an alias to `less`
+alias more=less
+
+# Make `pwd` short and have it copy the `pwd` to the clipboard
+function p { pwd | pbcopy ; pwd }

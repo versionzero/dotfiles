@@ -56,6 +56,8 @@
 	b2t = "!f() { git tag -m \"$2\" $1-TAG $1  &&  git branch -D $1; }; f"
 	t2r = "!f() { git branch ${1%-TAG} $1  &&  git tag -d $1; }; f"
 	conflicts = !git ls-files -u | cut -f 2 | sort -u
+	semtag = !git tag -a $(semver tag) -m \"tagging $(semver tag)\"
+	sv = !git tag -a $(semver tag) -m \"tagging $(semver tag)\"
 
 [advice]
 
@@ -110,7 +112,7 @@
 
 [core]
 	editor = emacs
-	excludesfile = ~/.gitignore
+	excludesfile = /Users/benner/.gitignore
 	whitespace = trailing-space,space-before-tab
 	quotepath = false
 
