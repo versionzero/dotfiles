@@ -9,7 +9,7 @@
 --color-match
 bold red
 --color-lineno
-bold blue
+blue
 
 # Print 1 line of context before and after a matching line
 --context=1
@@ -20,9 +20,6 @@ bold blue
 # Print a filename heading above each file's results and
 # print a break between results from different files
 --group
-
-# Introduce Haml to ack
---type-set=haml=.haml
 
 # Ignore vendor/, log/ and .git/
 --ignore-dir=vendor
